@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Cliente</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Cadastro de Cliente</h2>
+
+    <div th:if="${erroCadastro}" class="alert alert-danger">
+        <span th:text="${erroCadastro}"></span>
+    </div>
+
+    <form th:action="@{/clientes/cadastrar}" th:object="${cliente}" method="post" id="formCliente">
+        <input type="hidden" name="from" th:value="${from}">
+
+        <div class="mb-4">
+            <h4>Dados Pessoais</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Nome Completo*</label>
+                    <input type="text" th:field="*{nomeCompleto}" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">CPF*</label>
+                    <input type="text" th:field="*{cpf}" class="form-control" required maxlength="14"
+                           title="Formato: 000.000.000-00">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">E-mail*</label>
+                    <input th:field="*{email}" class="form-control" required type="email">
+                    <div th:if="${erroEmail}" class="text-danger mt-1" th:text="${erroEmail}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Senha*</label>
+                    <input type="password" th:field="*{senha}" class="form-control" required minlength="6">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Repetir Senha*</label>
+                    <input type="password" name="confirmarSenha" class="form-control" required minlength="6">
+                    <div th:if="${erroSenha}" class="text-danger mt-1" th:text="${erroSenha}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Data de Nascimento*</label>
+                    <input type="date" th:field="*{dataNascimento}" class="form-control" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Gênero*</label>
+                    <select th:field="*{genero}" class="form-control" required>
+                        <option value="">Selecione</option>
+                        <option th:each="gen : ${generos}" th:value="${gen}" th:text="${gen}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h4 class="text-center">Endereço de Faturamento*</h4>
+            <input type="hidden" th:field="*{enderecos[0].tipo}" value="FATURAMENTO">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">CEP*</label>
+                    <input type="text" th:field="*{enderecos[0].cep}" class="form-control" id="cepFaturamento">
+                    <button type="button" class="btn btn-sm btn-outline-secondary mt-1 w-100"
+                            onclick="buscarEnderecoFaturamento()">Buscar CEP</button>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Logradouro*</label>
+                    <input type="text" th:field="*{enderecos[0].logradouro}" class="form-control" id="logradouroFaturamento">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Número*</label>
+                    <input type="text" th:field="*{enderecos[0].numero}" class="form-control" id="numeroFaturamento">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Complemento</label>
+                    <input type="text" th:field="*{enderecos[0].complemento}" class="form-control" id="complementoFaturamento">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Bairro*</label>
+                    <input type="text" th:field="*{enderecos[0].bairro}" class="form-control" id="bairroFaturamento">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Cidade*</label>
+                    <input type="text" th:field="*{enderecos[0].cidade}" class="form-control" id="cidadeFaturamento">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">UF*</label>
+                    <input type="text" th:field="*{enderecos[0].uf}" class="form-control" id="ufFaturamento" maxlength="2">
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="text-center mb-3">
+                <h4>Endereços de Entrega</h4>
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="copiarEndereco">
+                    <label class="form-check-label" for="copiarEndereco">Usar mesmo endereço de faturamento</label>
+                </div>
+            </div>
+
+            <div id="enderecosEntrega">
+                <div class="endereco-entrega">
+                    <input type="hidden" th:field="*{enderecos[1].tipo}" value="ENTREGA">
+
+                    <div class="row g-3">
+                        <div class="col-md-2">
+                            <label class="form-label">CEP*</label>
+                            <input type="text" th:field="*{enderecos[1].cep}" class="form-control" id="cepEntrega">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Logradouro*</label>
+                            <input type="text" th:field="*{enderecos[1].logradouro}" class="form-control" id="logradouroEntrega">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label">Número*</label>
+                            <input type="text" th:field="*{enderecos[1].numero}" class="form-control" id="numeroEntrega">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label">Complemento</label>
+                            <input type="text" th:field="*{enderecos[1].complemento}" class="form-control" id="complementoEntrega">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Bairro*</label>
+                            <input type="text" th:field="*{enderecos[1].bairro}" class="form-control" id="bairroEntrega">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Cidade*</label>
+                            <input type="text" th:field="*{enderecos[1].cidade}" class="form-control" id="cidadeEntrega">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">UF*</label>
+                            <input type="text" th:field="*{enderecos[1].uf}" class="form-control" id="ufEntrega" maxlength="2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <button type="button" class="btn btn-outline-secondary mt-3" id="adicionarEndereco">
+        + Adicionar outro endereço
+    </button>
+
+<div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+        </div>
+    </form>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    function buscarEnderecoFaturamento() {
+        const cep = document.getElementById("cepFaturamento").value.replace(/\D/g, '');
+
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById("logradouroFaturamento").value = data.logradouro;
+                        document.getElementById("bairroFaturamento").value = data.bairro;
+                        document.getElementById("cidadeFaturamento").value = data.localidade;
+                        document.getElementById("ufFaturamento").value = data.uf;
+                    } else {
+                        alert('CEP não encontrado.');
+                    }
+                })
+                .catch(() => alert('Erro ao buscar o CEP.'));
+        } else {
+            alert('Informe um CEP válido com 8 dígitos.');
+        }
+    }
+
+    $('#copiarEndereco').change(function () {
+        if (this.checked) {
+            $('#cepEntrega').val($('#cepFaturamento').val());
+            $('#logradouroEntrega').val($('#logradouroFaturamento').val());
+            $('#numeroEntrega').val($('#numeroFaturamento').val());
+            $('#complementoEntrega').val($('#complementoFaturamento').val());
+            $('#bairroEntrega').val($('#bairroFaturamento').val());
+            $('#cidadeEntrega').val($('#cidadeFaturamento').val());
+            $('#ufEntrega').val($('#ufFaturamento').val());
+        }
+    });
+</script>
+</body>
+</html>
