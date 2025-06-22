@@ -2,12 +2,207 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Cliente</title>
+    <title>SampaStore - Cadastro de Cliente</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            padding-bottom: 50px; /* Espaço para o footer */
+        }
+        .container.mt-4 {
+            background-color: #2a2a2a;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            margin-top: 30px;
+        }
+        h2, h4 {
+            color: #00FFFF;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .form-label {
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+        .form-control, .form-select {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border: 1px solid #555;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #4a4a4a;
+            border-color: #00FFFF;
+            box-shadow: 0 0 0 0.25rem rgba(0, 255, 255, 0.25);
+        }
+        .invalid-feedback, .text-danger {
+            color: #ff6347 !important;
+        }
+        .alert-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #00FFFF;
+            border-color: #00FFFF;
+            color: #1a1a1a;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #00E0E0;
+            border-color: #00E0E0;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .btn-outline-secondary {
+            color: #bbb;
+            border-color: #bbb;
+            background-color: transparent;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #bbb;
+            color: #1a1a1a;
+        }
+        footer {
+            background-color: #1f1f1f;
+            color: #e0e0e0;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid #3a3a3a;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        footer a {
+            color: #00FFFF;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        /* Navbar */
+        .navbar-sampastore {
+            background: linear-gradient(90deg, #1f1f1f, #2c3e50);
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+        }
+        .navbar-brand {
+            color: #00FFFF !important;
+            font-weight: bold;
+            font-size: 1.8rem;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+        }
+        .navbar-light {
+            color: #e0e0e0 !important;
+            border-color: #00FFFF !important;
+        }
+        .navbar-light:hover {
+            background-color: #00FFFF !important;
+            color: #1a1a1a !important;
+        }
+        .dropdown-menu {
+            background-color: #2a2a2a;
+            border: 1px solid #3a3a3a;
+        }
+        .dropdown-item {
+            color: #e0e0e0;
+        }
+        .dropdown-item:hover {
+            background-color: #3a3a3a;
+            color: #00FFFF;
+        }
+        .dropdown-divider {
+            border-top-color: #555;
+        }
+        .btn-light {
+            background-color: #4a4a4a;
+            color: #00FFFF;
+            border-color: #00FFFF;
+        }
+        .btn-light:hover {
+            background-color: #00FFFF;
+            color: #4a4a4a;
+        }
+        .badge.rounded-pill {
+            background-color: #FF007F !important;
+        }
+    </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-sampastore">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <span class="fs-4 fw-bold text-white">SampaStore</span>
+        </a>
+
+        <div class="d-flex align-items-center gap-3">
+            <div class="dropdown" th:if="${usuarioLogado != null}">
+                <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLinkLogado" data-bs-toggle="dropdown">
+                    Olá, <span th:text="${usuarioLogado.username.contains('@') ? usuarioLogado.username.substring(0, usuarioLogado.username.indexOf('@')) : usuarioLogado.username}"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" th:href="@{/clientes/conta}">
+                            <i class="bi bi-person-lines-fill"></i> Minha Conta
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/meus-pedidos}">
+                            <i class="bi bi-card-list"></i> Meus Pedidos
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/loja}">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="dropdown-item" style="border: none; background: none; padding: 0;">
+                                <i class="bi bi-box-arrow-right"></i> Sair
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="dropdown" th:if="${usuarioLogado == null}">
+                <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLinkNaoLogado" data-bs-toggle="dropdown">
+                    Minha Conta
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" th:href="@{/login_cliente}">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/clientes/cadastro}">
+                            <i class="bi bi-person-plus"></i> Criar Conta
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <a href="/carrinho" class="btn btn-light position-relative">
+                <i class="bi bi-cart3"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span th:text="${carrinho != null ? carrinho.totalItens : 0}"></span>
+                </span>
+            </a>
+        </div>
+    </div>
+</nav>
+
 <div class="container mt-4">
-    <h2>Cadastro de Cliente</h2>
+    <h2>Cadastro de Cliente na SampaStore</h2>
 
     <div th:if="${erroCadastro}" class="alert alert-danger">
         <span th:text="${erroCadastro}"></span>
@@ -67,8 +262,8 @@
                 <div class="col-md-2">
                     <label class="form-label">CEP*</label>
                     <input type="text" th:field="*{enderecos[0].cep}" class="form-control" id="cepFaturamento">
-                    <button type="button" class="btn btn-sm btn-outline-secondary mt-1 w-100"
-                            onclick="buscarEnderecoFaturamento()">Buscar CEP</button>
+                    <button type="button" class="btn btn-sm btn-outline-info mt-1 w-100"
+                            onclick="buscarEnderecoFaturamento()"><i class="bi bi-geo-alt"></i> Buscar CEP</button>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Logradouro*</label>
@@ -103,9 +298,9 @@
             </div>
 
             <div class="d-flex justify-content-end mb-3">
-                <div class="form-check">
+                <div class="form-check form-switch">
                     <input type="checkbox" class="form-check-input" id="copiarEndereco">
-                    <label class="form-check-label" for="copiarEndereco">Usar mesmo endereço de faturamento</label>
+                    <label class="form-check-label text-light" for="copiarEndereco">Usar mesmo endereço de faturamento</label>
                 </div>
             </div>
 
@@ -153,19 +348,50 @@
             </div>
         </div>
 
-
-
-        <button type="button" class="btn btn-outline-secondary mt-3" id="adicionarEndereco">
-        + Adicionar outro endereço
-    </button>
-
-<div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+        <div class="d-grid gap-2 mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-person-plus"></i> Criar Conta
+            </button>
         </div>
     </form>
 </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<footer style="background-color: #1f1f1f; color: var(--cor-texto); padding: 20px 0; font-family: Arial, sans-serif; border-top: 1px solid #3a3a3a;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="15" style="max-width: 1200px; margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td width="33%" style="vertical-align: top; border-right: 1px solid #444; padding-right: 20px;">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Sobre a SampaStore</div>
+                <div style="color: #ccc; font-size: 14px; line-height: 1.5;">
+                    Sua loja de tecnologia confiável com os melhores preços e produtos de qualidade.
+                </div>
+            </td>
+
+            <td width="33%" style="vertical-align: top; border-right: 1px solid #444; padding: 0 20px; text-align: center;">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Links Úteis</div>
+                <div style="color: #ccc; font-size: 14px; line-height: 1.8;">
+                    <div><a th:href="@{/contato}">Contato</a></div>
+                    <div><a th:href="@{/politica-privacidade}">Política de Privacidade</a></div>
+                    <div><a th:href="@{/termos-uso}">Termos de Uso</a></div>
+                </div>
+            </td>
+
+            <td width="33%" style="vertical-align: top; padding-left: 20px;">
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Minhas Redes</div>
+                <div style="color: #ccc; font-size: 24px;">
+                    <a href="https://www.linkedin.com/in/eliveltonsampaio/" target="_blank" style="color: #0A66C2; text-decoration: none; margin-right: 15px;">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+
+                    <a href="https://github.com/sampadev" target="_blank" style="color: #f5f5f5; text-decoration: none;">
+                        <i class="bi bi-github"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     function buscarEnderecoFaturamento() {
         const cep = document.getElementById("cepFaturamento").value.replace(/\D/g, '');
@@ -198,6 +424,15 @@
             $('#bairroEntrega').val($('#bairroFaturamento').val());
             $('#cidadeEntrega').val($('#cidadeFaturamento').val());
             $('#ufEntrega').val($('#ufFaturamento').val());
+        } else {
+            // Limpar os campos do endereço de entrega se a caixa for desmarcada
+            $('#cepEntrega').val('');
+            $('#logradouroEntrega').val('');
+            $('#numeroEntrega').val('');
+            $('#complementoEntrega').val('');
+            $('#bairroEntrega').val('');
+            $('#cidadeEntrega').val('');
+            $('#ufEntrega').val('');
         }
     });
 </script>

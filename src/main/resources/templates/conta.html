@@ -2,41 +2,178 @@
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"/>
-  <title>Minha Conta - TechSeller</title>
+  <title>Minha Conta - SampaStore</title>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --cor-primaria: #2c3e50;
-      --cor-secundaria: #3498db;
-      --cor-texto: #2c3e50;
+      --cor-primaria: #1a1a1a;
+      --cor-secundaria: #2c3e50;
+      --cor-acento: #00FFFF; /* Azul ciano vibrante */
+      --cor-texto: #e0e0e0;
+      --cor-card-fundo: #2a2a2a;
+      --cor-borda-card: #3a3a3a;
+      --cor-preco: #28a745; /* Verde para preço */
+      --cor-botao-detalhes: #00FFFF;
+      --cor-botao-detalhes-hover: #00E0E0;
+      --cor-botao-add-carrinho: #28a745;
+      --cor-botao-add-carrinho-hover: #218838;
     }
     body {
-      background-color: #f8f9fa;
+      background-color: var(--cor-primaria);
+      color: var(--cor-texto);
+      font-family: 'Segoe UI', sans-serif;
     }
+    .navbar-sampastore {
+      background: linear-gradient(90deg, var(--cor-secundaria), #1f1f1f);
+      box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+    }
+    .navbar-brand {
+      color: var(--cor-acento) !important;
+      font-weight: bold;
+      font-size: 1.8rem;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+    }
+    .btn-outline-light {
+      color: var(--cor-acento) !important;
+      border-color: var(--cor-acento) !important;
+    }
+    .btn-outline-light:hover {
+      background-color: var(--cor-acento) !important;
+      color: var(--cor-primaria) !important;
+    }
+    .dropdown-menu {
+      background-color: var(--cor-card-fundo);
+      border: 1px solid var(--cor-borda-card);
+    }
+    .dropdown-item {
+      color: var(--cor-texto);
+    }
+    .dropdown-item:hover {
+      background-color: #3a3a3a;
+      color: var(--cor-acento);
+    }
+    .dropdown-divider {
+      border-top-color: #555;
+    }
+    .btn-light {
+      background-color: #4a4a4a;
+      color: var(--cor-acento);
+      border-color: var(--cor-acento);
+    }
+    .btn-light:hover {
+      background-color: var(--cor-acento);
+      color: var(--cor-card-fundo);
+    }
+    .badge.rounded-pill.bg-danger {
+      background-color: #FF007F !important; /* Rosa neon para o badge do carrinho */
+    }
+
+    /* Conteúdo específico da página */
     .section-title {
-      border-bottom: 2px solid #dee2e6;
+      border-bottom: 2px solid var(--cor-borda-card);
       margin-bottom: 15px;
       padding-bottom: 5px;
+      color: var(--cor-acento);
+    }
+    .card {
+      background-color: var(--cor-card-fundo);
+      border: 1px solid var(--cor-borda-card);
+      border-radius: 15px;
+      color: var(--cor-texto);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
     .address-card {
       padding: 15px;
-      border: 1px solid #dee2e6;
-      border-radius: 5px;
-      margin-bottom: 50px;
-      background-color: #ffffff;
+      border: 1px solid var(--cor-borda-card);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      background-color: #1f1f1f; /* Um pouco mais escuro que o card principal */
+      box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.1);
     }
-    .navbar-techseller {
-      background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    .address-card h5 {
+      color: var(--cor-acento);
     }
-    footer {
-      background-color: var(--cor-primaria);
+    .form-label {
+      color: var(--cor-texto);
+    }
+    .form-control, .form-select {
+      background-color: #3a3a3a;
+      color: var(--cor-texto);
+      border: 1px solid #555;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--cor-acento);
+      box-shadow: 0 0 0 0.25rem rgba(0, 255, 255, 0.25);
+      background-color: #3a3a3a; /* Mantém a cor de fundo no foco */
+      color: var(--cor-texto);
+    }
+    .btn-primary {
+      background-color: var(--cor-acento);
+      border-color: var(--cor-acento);
+      color: var(--cor-primaria);
+      font-weight: bold;
+    }
+    .btn-primary:hover {
+      background-color: var(--cor-botao-detalhes-hover);
+      border-color: var(--cor-botao-detalhes-hover);
+    }
+    .btn-success { /* Para o botão de adicionar endereço */
+      background-color: var(--cor-preco);
+      border-color: var(--cor-preco);
       color: white;
+    }
+    .btn-success:hover {
+      background-color: var(--cor-botao-add-carrinho-hover);
+      border-color: var(--cor-botao-add-carrinho-hover);
+    }
+    .btn-outline-secondary {
+      color: #aaa;
+      border-color: #aaa;
+    }
+    .btn-outline-secondary:hover {
+      background-color: #aaa;
+      color: var(--cor-primaria);
+    }
+    .btn-outline-info {
+      color: var(--cor-acento);
+      border-color: var(--cor-acento);
+    }
+    .btn-outline-info:hover {
+      background-color: var(--cor-acento);
+      color: var(--cor-primaria);
+    }
+    .badge.bg-success {
+      background-color: var(--cor-preco) !important;
+    }
+    .alert-success {
+      background-color: #214d3c;
+      color: #d1e7dd;
+      border-color: #28a745;
+    }
+    .alert-danger {
+      background-color: #5c2c31;
+      color: #f8d7da;
+      border-color: #dc3545;
+    }
+    .alert-info {
+      background-color: #2d4a5c;
+      color: #cfe2ff;
+      border-color: #0d6efd;
+    }
+
+    /* Estilos para o rodapé */
+    footer {
+      background-color: #1f1f1f;
+      color: var(--cor-texto);
+      padding: 20px 0;
+      font-family: Arial, sans-serif;
+      border-top: 1px solid #3a3a3a;
     }
     footer a {
-      color: white;
+      color: var(--cor-acento);
       text-decoration: none;
     }
     footer a:hover {
@@ -45,10 +182,24 @@
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark navbar-techseller">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <div id="logoutToast" class="toast align-items-center text-bg-info border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Realizando logout, aguarde...
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-sampastore">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <span class="fs-4 fw-bold text-white">TechSeller</span>
+      <span class="fs-4 fw-bold">SampaStore</span>
     </a>
     <div class="d-flex align-items-center gap-3">
       <div class="dropdown" th:if="${usuarioLogado != null}">
@@ -62,7 +213,7 @@
           <li><hr class="dropdown-divider"></li>
           <li>
             <form id="logoutForm" th:action="@{/logout}" method="post" style="display: inline;">
-              <button type="submit" class="dropdown-item" style="border: none; background: none; padding: 0;">
+              <button type="submit" class="dropdown-item" style="border: none; background: none; padding: 0;" onclick="logoutWithToast()">
                 <i class="bi bi-box-arrow-right"></i> Sair
               </button>
             </form>
@@ -87,25 +238,20 @@
     </div>
   </div>
 </nav>
-<!-- Conteúdo Principal -->
 <div class="container my-5">
-  <h2 class="mb-4 text-center">Minha Conta</h2>
-  <!-- Seção 1: Informações Pessoais -->
+  <h2 class="mb-4 text-center text-info">Minha Conta</h2>
   <div class="card mb-4">
     <div class="card-body">
       <h4 class="section-title">Informações Pessoais</h4><a class="btn btn-sm btn-outline-secondary float-end" href="#" title="Editar dados">✎</a>
       <form method="post" th:action="@{/clientes/conta/atualizarInfo}" th:object="${cliente}">
-        <!-- Campo de Nome -->
         <div class="mb-3">
           <label class="form-label" for="nome">Nome:</label>
           <input class="form-control" id="nome" required="" th:field="*{nomeCompleto}" type="text"/>
         </div>
-        <!-- Data de Nascimento -->
         <div class="mb-3">
           <label class="form-label" for="dataNascimento">Data de Nascimento:</label>
           <input type="date" id="dataNascimento" class="form-control" th:field="*{dataNascimento}" required />
         </div>
-        <!-- Gênero -->
         <div class="mb-3">
           <label class="form-label" for="genero">Gênero:</label>
           <select class="form-select" id="genero" required="" th:field="*{genero}">
@@ -119,7 +265,6 @@
       </form>
     </div>
   </div>
-  <!-- Seção 2: Alteração de Senha -->
   <div class="card mb-4">
     <div class="card-body">
       <h4 class="section-title">Alteração de Senha</h4>
@@ -144,11 +289,9 @@
       </form>
     </div>
   </div>
-  <!-- Seção 3: Endereços de Entrega -->
   <div class="card mb-4">
     <div class="card-body">
       <h4 class="section-title">Endereços de Entrega</h4>
-      <!-- Exibição do endereço padrão -->
       <div class="address-card mb-4" th:if="${enderecoPadrao != null}">
         <h5>Endereço Padrão</h5>
         <p><strong>CEP:</strong> <span th:text="${enderecoPadrao.cep}"></span></p>
@@ -161,7 +304,6 @@
         <span class="badge bg-success">Este é seu endereço padrão</span>
       </div>
 
-      <!-- Lista os endereços já cadastrados -->
       <div th:if="${cliente.enderecos != null and #lists.size(cliente.enderecos.?[tipo.name() == 'ENTREGA']) > 0}"></div>
       <div class="address-card mb-3" th:each="endereco, iterStat : ${cliente.enderecosEntrega}">
         <form method="post" th:action="@{/clientes/conta/editarEndereco/{index}(index=${iterStat.index})}">
@@ -210,11 +352,9 @@
           <span class="badge bg-success mt-2 w-100" th:if="${endereco.tipo.name() == 'PADRAO'}">Endereço Padrão</span>
         </form>
       </div>
-      <!-- Se nenhum endereço estiver cadastrado -->
       <div class="alert alert-info" th:if="${cliente.enderecosEntrega == null or #lists.isEmpty(cliente.enderecosEntrega)}">
         Você ainda não possui endereços cadastrados.
       </div>
-      <!-- Formulário para adicionar novo endereço -->
       <hr class="my-4">
       <h4 class="section-title">Adicionar Novo Endereço</h4>
       <form method="post" th:action="@{/clientes/conta/adicionarEndereco}">
@@ -254,17 +394,16 @@
 
     </div>
   </div>
-  <!-- Bootstrap JS -->
-
-  <footer style="background-color: #2a2a2a; padding: 20px 0; font-family: Arial, sans-serif; color: white;">
+  <footer style="background-color: #1f1f1f; color: var(--cor-texto); padding: 20px 0; font-family: Arial, sans-serif; border-top: 1px solid #3a3a3a;">
     <table width="100%" border="0" cellspacing="0" cellpadding="15" style="max-width: 1200px; margin: 0 auto; border-collapse: collapse;">
       <tr>
         <td width="33%" style="vertical-align: top; border-right: 1px solid #444; padding-right: 20px;">
-          <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Sobre a TechSeller</div>
+          <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Sobre a SampaStore</div>
           <div style="color: #ccc; font-size: 14px; line-height: 1.5;">
             Sua loja de tecnologia confiável com os melhores preços e produtos de qualidade.
           </div>
         </td>
+
         <td width="33%" style="vertical-align: top; border-right: 1px solid #444; padding: 0 20px; text-align: center;">
           <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Links Úteis</div>
           <div style="color: #ccc; font-size: 14px; line-height: 1.8;">
@@ -273,17 +412,16 @@
             <div><a th:href="@{/termos-uso}">Termos de Uso</a></div>
           </div>
         </td>
+
         <td width="33%" style="vertical-align: top; padding-left: 20px;">
-          <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Redes Sociais</div>
+          <div style="font-weight: bold; margin-bottom: 8px; font-size: 18px;">Minhas Redes</div>
           <div style="color: #ccc; font-size: 24px;">
-            <a href="https://www.facebook.com/senacsaopaulo" target="_blank" style="color: #ccc; text-decoration: none; margin-right: 15px;">
-              <i class="bi bi-facebook"></i>
+            <a href="https://www.linkedin.com/in/eliveltonsampaio/" target="_blank" style="color: #0A66C2; text-decoration: none; margin-right: 15px;">
+              <i class="bi bi-linkedin"></i>
             </a>
-            <a href="https://x.com/senacsaopaulo" target="_blank" style="color: #ccc; text-decoration: none; margin-right: 15px;">
-              <i class="bi bi-twitter"></i>
-            </a>
-            <a href="https://www.instagram.com/senacsaopaulo/" target="_blank" style="color: #ccc; text-decoration: none;">
-              <i class="bi bi-instagram"></i>
+
+            <a href="https://github.com/sampadev" target="_blank" style="color: #f5f5f5; text-decoration: none;">
+              <i class="bi bi-github"></i>
             </a>
           </div>
         </td>
@@ -324,6 +462,15 @@
                 console.error('Erro ao buscar CEP:', error);
                 alert('Erro ao buscar CEP. Tente novamente.');
               });
+    }
+    // Função logoutWithToast (necessária para a navbar)
+    function logoutWithToast() {
+      var toastEl = document.getElementById('logoutToast');
+      var toast = new bootstrap.Toast(toastEl, { delay: 1500 });
+      toast.show();
+      setTimeout(function() {
+        document.getElementById('logoutForm').submit();
+      }, 1500);
     }
   </script>
   <script>
