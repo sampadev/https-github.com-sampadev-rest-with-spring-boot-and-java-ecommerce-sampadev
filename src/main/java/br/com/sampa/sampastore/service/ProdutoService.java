@@ -54,4 +54,6 @@ public interface ProdutoService {
     void reordenarImagens(Long produtoId, List<Long> novaOrdemIds);
 
     List<Produto> listarProdutosAtivos(String filtro);
+
+    Optional<Produto> findByNome(String nome); //
 }

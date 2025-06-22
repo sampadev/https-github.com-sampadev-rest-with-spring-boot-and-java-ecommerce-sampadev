@@ -18,6 +18,8 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     @Override
     Optional<Produto> findById(Long id);
 
+    Optional<Produto> findByNome(String nome); //
+
     @Query("SELECT DISTINCT p FROM Produto p LEFT JOIN p.imagens i " +
             "WHERE i.imagemPrincipal = true OR i IS NULL")
     List<Produto> findAllWithPrincipalImage();
@@ -47,7 +49,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
             "WHERE i.imagemPrincipal = true OR i IS NULL ORDER BY p.nome DESC")
     List<Produto> findAllWithPrincipalImageOrderedDesc();
 
-    // 🔧 CORREÇÃO APLICADA AQUI:
     @Query("SELECT p FROM Produto p LEFT JOIN p.imagens i " +
             "WHERE (:filtro IS NULL OR " +
             "(LOWER(p.nome) LIKE LOWER(concat('%', :filtro, '%')) OR " +

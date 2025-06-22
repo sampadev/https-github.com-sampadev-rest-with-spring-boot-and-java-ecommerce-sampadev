@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+		<relativePath/> </parent>
 	<groupId>br.com.sampa</groupId>
 	<artifactId>sampastore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -39,6 +38,10 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.json</groupId>
@@ -67,8 +70,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.2.224</version>  <!-- Atualize para uma versão recente -->
-			<scope>runtime</scope>
+			<version>2.2.224</version>  <scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -77,7 +79,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Dependencia de teste -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

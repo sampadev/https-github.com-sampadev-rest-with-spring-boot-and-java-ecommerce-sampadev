@@ -72,11 +72,22 @@ public class ProdutoServiceImpl implements ProdutoService {
         return produtos;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Produto> findByNome(String nome) {
+        return produtoRepository.findByNome(nome); //
+    }
+
     @Transactional
     @Override
     public Produto salvarProduto(Produto produto, MultipartFile[] imagens) throws IOException {
         Objects.requireNonNull(produto, "Produto não pode ser nulo");
         validarImagens(imagens);
+
+        // Adicione a verificação de produto existente aqui
+        if (produtoRepository.findByNome(produto.getNome()).isPresent()) {
+            throw new IllegalArgumentException("Já existe um produto com o nome '" + produto.getNome() + "'");
+        }
 
         produto.setAvaliacao(Optional.ofNullable(produto.getAvaliacao()).orElse(BigDecimal.ZERO));
         produto.setAtivo(Optional.ofNullable(produto.getAtivo()).orElse(true));
@@ -108,6 +119,13 @@ public class ProdutoServiceImpl implements ProdutoService {
         if (!ignorarValidacaoImagens) {
             validarImagens(imagens);
         }
+
+        // Adicione a verificação de produto existente aqui, a menos que seja uma edição
+        // e você esteja salvando sem validar as imagens (o que implica que a validação de nome foi feita antes)
+        if (produto.getProdutoId() == null && produtoRepository.findByNome(produto.getNome()).isPresent()) {
+            throw new IllegalArgumentException("Já existe um produto com o nome '" + produto.getNome() + "'");
+        }
+
 
         produto.setAvaliacao(Optional.ofNullable(produto.getAvaliacao()).orElse(BigDecimal.ZERO));
         produto.setAtivo(Optional.ofNullable(produto.getAtivo()).orElse(true));
@@ -192,6 +210,14 @@ public class ProdutoServiceImpl implements ProdutoService {
     public void editarProduto(Produto produto, MultipartFile[] novasImagens, List<Long> imagensRemovidas) {
         Produto produtoExistente = produtoRepository.findByIdWithImagens(produto.getProdutoId())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
+        // Verificação de nome para edição:
+        // Permite que o nome seja o mesmo do produto que está sendo editado,
+        // mas não permite que seja o nome de outro produto existente.
+        Optional<Produto> produtoComMesmoNome = produtoRepository.findByNome(produto.getNome());
+        if (produtoComMesmoNome.isPresent() && !produtoComMesmoNome.get().getProdutoId().equals(produto.getProdutoId())) {
+            throw new IllegalArgumentException("Já existe outro produto com o nome '" + produto.getNome() + "'");
+        }
 
         produtoExistente.setNome(produto.getNome());
         produtoExistente.setDescricaoDetalhada(produto.getDescricaoDetalhada());
@@ -527,7 +553,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public void definirImagemComoPrincipal(Long imagemId) {
-        
+
     }
 
     @Override
