@@ -71,6 +71,7 @@ public class SecurityConfig {
                         .requestMatchers("/produtos/editar/**", "/gerenciar-produtos").hasAnyRole("ADMIN", "ESTOQUISTA")
                         .requestMatchers(HttpMethod.GET, "/menu", "/listarUsuarios", "/usuarios/**", "/home").authenticated()
                         .requestMatchers("/", "/loja/**", "/carrinho/**", "/css/**", "/js/**", "/img/**", "/produtos/imagem/**").permitAll()
+                        .requestMatchers("/produtos/detalhes/**").permitAll()
                         .requestMatchers("/pedido/sucesso").permitAll()
                         .anyRequest().authenticated()
                 )

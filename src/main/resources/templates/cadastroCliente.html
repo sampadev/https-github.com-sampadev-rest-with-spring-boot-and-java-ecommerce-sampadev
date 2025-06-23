@@ -132,6 +132,15 @@
         .badge.rounded-pill {
             background-color: #FF007F !important;
         }
+        /* Adicionado para o estilo do botão buscar CEP */
+        .btn-outline-info {
+            color: #00FFFF;
+            border-color: #00FFFF;
+        }
+        .btn-outline-info:hover {
+            background-color: #00FFFF;
+            color: #1a1a1a;
+        }
     </style>
 </head>
 <body>
@@ -312,6 +321,8 @@
                         <div class="col-md-2">
                             <label class="form-label">CEP*</label>
                             <input type="text" th:field="*{enderecos[1].cep}" class="form-control" id="cepEntrega">
+                            <button type="button" class="btn btn-sm btn-outline-info mt-1 w-100"
+                                    onclick="buscarEnderecoEntrega()"><i class="bi bi-geo-alt"></i> Buscar CEP</button>
                         </div>
 
                         <div class="col-md-6">
@@ -405,6 +416,29 @@
                         document.getElementById("bairroFaturamento").value = data.bairro;
                         document.getElementById("cidadeFaturamento").value = data.localidade;
                         document.getElementById("ufFaturamento").value = data.uf;
+                    } else {
+                        alert('CEP não encontrado.');
+                    }
+                })
+                .catch(() => alert('Erro ao buscar o CEP.'));
+        } else {
+            alert('Informe um CEP válido com 8 dígitos.');
+        }
+    }
+
+    // Nova função para buscar CEP do endereço de entrega
+    function buscarEnderecoEntrega() {
+        const cep = document.getElementById("cepEntrega").value.replace(/\D/g, '');
+
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById("logradouroEntrega").value = data.logradouro;
+                        document.getElementById("bairroEntrega").value = data.bairro;
+                        document.getElementById("cidadeEntrega").value = data.localidade;
+                        document.getElementById("ufEntrega").value = data.uf;
                     } else {
                         alert('CEP não encontrado.');
                     }

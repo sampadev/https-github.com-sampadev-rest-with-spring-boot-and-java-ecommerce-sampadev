@@ -179,6 +179,22 @@
     footer a:hover {
       text-decoration: underline;
     }
+    input.form-control,
+    select.form-select,
+    textarea.form-control {
+      background-color: var(--cor-card-fundo) !important;
+      color: var(--cor-texto) !important;
+      border: 1px solid var(--cor-borda-card) !important;
+    }
+
+    input.form-control:focus,
+    select.form-select:focus,
+    textarea.form-control:focus {
+      background-color: var(--cor-card-fundo) !important;
+      color: var(--cor-texto) !important;
+      border-color: var(--cor-acento) !important;
+      box-shadow: 0 0 0 0.25rem rgba(0, 255, 255, 0.25) !important;
+    }
   </style>
 </head>
 <body>
