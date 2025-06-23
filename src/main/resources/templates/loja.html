@@ -463,29 +463,29 @@
 </nav>
 
 <main class="container my-5">
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <form th:action="@{/loja}" method="get">
+    <form th:action="@{/loja}" method="get" id="filterForm">
+        <div class="row mb-4">
+            <div class="col-md-6">
                 <input type="text" name="filtro" class="form-control bg-dark text-white border-secondary" placeholder="Pesquisar produtos..." th:value="${filtro}">
-            </form>
+            </div>
+            <div class="col-md-3">
+                <select name="categoria" class="form-select bg-dark text-white border-secondary">
+                    <option value="" th:selected="${filtroCategoria == null or filtroCategoria == ''}">Todas as Categorias</option>
+                    <option value="Eletronicos" th:selected="${filtroCategoria == 'Eletronicos'}">Eletrônicos</option>
+                    <option value="Computadores" th:selected="${filtroCategoria == 'Computadores'}">Computadores</option>
+                    <option value="Acessorios" th:selected="${filtroCategoria == 'Acessorios'}">Acessórios</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="ordenarPor" class="form-select bg-dark text-white border-secondary">
+                    <option value="" th:selected="${filtroOrdenarPor == null or filtroOrdenarPor == ''}">Ordenar por</option>
+                    <option value="menorPreco" th:selected="${filtroOrdenarPor == 'menorPreco'}">Menor Preço</option>
+                    <option value="maiorPreco" th:selected="${filtroOrdenarPor == 'maiorPreco'}">Maior Preço</option>
+                    <option value="maisRecentes" th:selected="${filtroOrdenarPor == 'maisRecentes'}">Mais Recentes</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-3">
-            <select class="form-select bg-dark text-white border-secondary">
-                <option>Categoria</option>
-                <option>Eletrônicos</option>
-                <option>Computadores</option>
-                <option>Acessórios</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <select class="form-select bg-dark text-white border-secondary">
-                <option>Ordenar por</option>
-                <option>Menor Preço</option>
-                <option>Maior Preço</option>
-                <option>Mais Recentes</option>
-            </select>
-        </div>
-    </div>
+    </form>
 
     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${success}"></span>
@@ -797,6 +797,13 @@
 
         document.querySelectorAll('.product-carousel .carousel').forEach(carouselEl => {
             new bootstrap.Carousel(carouselEl, { interval: 6000 });
+        });
+
+        // Adiciona evento de 'change' aos selects de filtro para submeter o formulário
+        document.querySelectorAll('.form-select[name="categoria"], .form-select[name="ordenarPor"]').forEach(selectElement => {
+            selectElement.addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
         });
     });
 
