@@ -17,7 +17,7 @@ RUN mvn clean install -DskipTests
 
 # --- Estágio de Execução (rodar a aplicação) ---
 # Use uma imagem JRE (runtime environment) leve para a execução, sem ferramentas de build
-FROM openjdk:21-jre-slim
+FROM openjdk:21-slim
 
 WORKDIR /app
 
