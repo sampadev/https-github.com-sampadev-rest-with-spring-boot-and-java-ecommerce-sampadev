@@ -1,5 +1,6 @@
 # Estágio de Build (construir a aplicação)
-FROM openjdk:21-jdk-slim AS builder # Use uma imagem Java base leve, compatível com seu projeto Java 21
+# Use uma imagem Java base leve, compatível com seu projeto Java 21
+FROM openjdk:21-jdk-slim AS builder
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
