@@ -1,6 +1,6 @@
 # Estágio de Build (construir a aplicação)
 # Use uma imagem Java base leve, compatível com seu projeto Java 21
-FROM maven:3.9-openjdk-21-slim AS builder
+FROM maven:3.9.6-openjdk-21 AS builder
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
